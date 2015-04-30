@@ -45,8 +45,8 @@ void ShowError(int connfd,const char* info)
 
 int main()
 {
-    const char* ip="10.3.129.86";
-    int port=12345;
+    const char* ip="0.0.0.0";
+    int port=8080;
 	//忽略SIGPIPE信号
     AddSig(SIGPIPE,SIG_IGN);
     ThreadPool<HttpConn>* pool=NULL;

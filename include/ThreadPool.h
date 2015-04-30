@@ -11,31 +11,31 @@ template<typename T>
 class ThreadPool
 {
     public:
-		//创建并初始化线程池类，线程数，最大请求数
+        //创建并初始化线程池类，线程数，最大请求数
         ThreadPool(int thread_number=6,int max_requests=10000);
-		//销毁线程池类
+        //销毁线程池类
         virtual ~ThreadPool();
-		//向请求队列添加任务
+        //向请求队列添加任务
         bool Append(T* request);
-		//处理函数
+        //处理函数
         static void* Worker(void *arg);
-		//线程池运行
+        //线程池运行
         void Run();
     protected:
     private:
-		//线程数
+        //线程数
         int m_thread_number_;
-		//请求队列中允许的最大请求数
+        //请求队列中允许的最大请求数
         int m_max_requests_;
-		//描述线程池的数组
+        //描述线程池的数组
         pthread_t* m_threads_;
-		//请求队列
+        //请求队列
         std::list<T*>m_workqueue_;
-		//保护请求队列的互斥锁
+        //保护请求队列的互斥锁
         Locker m_queuelocker_;
-		//信号量，是否有任务处理
+        //信号量，是否有任务处理
         Sem m_queuestat;
-		//是否结束线程
+        //是否结束线程
         bool m_stop_;
 };
 
@@ -54,7 +54,7 @@ ThreadPool<T>::ThreadPool(int thread_number,int max_requests):m_thread_number_(t
 
     for(int i=0;i<thread_number;++i)
     {
-        printf("create the %dth thread\n",i);
+        printf("Create the %dth thread.\n",i);
         if(pthread_create(m_threads_+i,NULL,Worker,this)!=0)
         {
             delete []m_threads_;
@@ -95,7 +95,7 @@ void* ThreadPool<T>::Worker(void* arg)
 {
     ThreadPool* pool=(ThreadPool*)arg;
     pool->Run();
-    return pool;
+// return pool;
 }
 
 template<typename T>
