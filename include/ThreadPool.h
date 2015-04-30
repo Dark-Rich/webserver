@@ -12,7 +12,7 @@ class ThreadPool
 {
     public:
         //创建并初始化线程池类，线程数，最大请求数
-        ThreadPool(int thread_number=6,int max_requests=10000);
+        ThreadPool(int thread_number=4,int max_requests=10000);
         //销毁线程池类
         virtual ~ThreadPool();
         //向请求队列添加任务

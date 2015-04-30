@@ -88,8 +88,8 @@ void HttpConn::Init(int sockfd,const struct sockaddr_in& addr)
     m_sockfd_=sockfd;
     m_address_=addr;
    /*注释部分避免超时*/
-    //int reuse=1;
-    //setsockopt(m_sockfd_,SOL_SOCKET,SO_REUSEADDR,&reuse,sizeof(reuse));
+//    int reuse=1;
+//    setsockopt(m_sockfd_,SOL_SOCKET,SO_REUSEADDR,&reuse,sizeof(reuse));
     AddFd(m_epollfd_,sockfd,true);
     m_user_count_++;
     Init();
@@ -307,7 +307,7 @@ HttpConn::HTTP_CODE HttpConn::ProcessRead()
         text=GetLine();
         /*记录下一行的起始位置*/
         m_start_line_=m_checked_idx_;
-        printf("Got 1 http line:%s.\n",text);
+        printf("Got 1 http line: %s.\n",text);
         switch(m_check_state_)
         {
             /*分析请求行*/
@@ -329,6 +329,16 @@ HttpConn::HTTP_CODE HttpConn::ProcessRead()
                     return BAD_REQUEST;
                 }
                 else if(ret==GET_REQUEST)
+                {
+                    return DoRequest();
+                }
+                line_status=LINE_OPEN;
+                break;
+            }
+            case CHECK_STATE_CONTENT:
+            {
+                ret=ParseContent(text);
+                if(ret==GET_REQUEST)
                 {
                     return DoRequest();
                 }
